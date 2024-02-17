@@ -9,7 +9,6 @@ char convertToLetter(unsigned long decimal) {
   }
 }
 
-
 unsigned long convertToRemote(unsigned long decimal) {
   if (decimal > 0b1111)
     return decimal - (decimal & 0b1111);

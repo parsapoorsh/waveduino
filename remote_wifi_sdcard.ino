@@ -41,15 +41,17 @@ void loop() {
     char button = convertToLetter(decimal);
     unsigned long remote = convertToRemote(decimal);
 
+    // dont care about noise
     if (length <= 4)
       goto after_receiver;
     
-    char output[164]; // Adjust the size as needed
+    char output[164]; // adjust the size as needed
     
     sprintf(
       output,
       "%lu -> %s / Protocol: %d / Remote: %lu / %dbit %s / Delay: %d / Button: %c\n", 
-      millis(), (priv_decimal == decimal) ? "Repeated" : "Received", 
+      millis(), 
+      (priv_decimal == decimal) ? "Repeated" : "Received", 
       protocol, remote, length, bits, delay, button
     );
 
@@ -57,9 +59,11 @@ void loop() {
         priv_decimal = decimal;
 
     Serial.print(output);
+
+    // write to SD card
     myFile.print(output);
     myFile.flush();
-
+  
     mySwitch.resetAvailable();
   }
   after_receiver:
@@ -76,7 +80,7 @@ void loop() {
     incomingString.toCharArray(char_array, str_len);
 
     Serial.print(incomingString);
-    mySwitch.send(char_array);
+    mySwitch.send(char_array); // send the signal
     Serial.println(" done");
   }
 }
