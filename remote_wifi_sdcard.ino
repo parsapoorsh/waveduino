@@ -43,6 +43,9 @@ void loop() {
   // put your main code here, to run repeatedly:
   t.handle();
 
+  // 1ms sleep to avoid 100% cpu utilization, good for cpu temp and longer batter life
+  delay(1);
+
   if (mySwitch.available()) {
     unsigned int protocol = mySwitch.getReceivedProtocol();
     unsigned long decimal = mySwitch.getReceivedValue();
