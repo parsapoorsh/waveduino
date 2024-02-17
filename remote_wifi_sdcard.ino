@@ -44,9 +44,6 @@ void loop() {
     if (length <= 4)
       goto after_receiver;
     
-    if (priv_decimal != decimal)
-        priv_decimal = decimal;
-    
     char output[164]; // Adjust the size as needed
     
     sprintf(
@@ -55,6 +52,9 @@ void loop() {
       millis(), (priv_decimal == decimal) ? "Repeated" : "Received", 
       protocol, remote, length, bits, delay, button
     );
+
+    if (priv_decimal != decimal)
+        priv_decimal = decimal;
 
     Serial.print(output);
     myFile.print(output);
