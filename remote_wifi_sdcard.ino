@@ -1,5 +1,8 @@
 #include <RCSwitch.h>
+#include <SPI.h>
+#include <SD.h>
 
+File myFile;
 RCSwitch mySwitch = RCSwitch();
 volatile unsigned long priv_decimal = 0;
 String incomingString;
@@ -9,6 +12,14 @@ void setup() {
   Serial.begin(115200);
   // Serial.println();
   Serial.println("booting");
+
+  Serial.print("Initializing SD card...");
+  if (!SD.begin(D8)) {
+    Serial.println("initialization failed!");
+    return;
+  }
+  myFile = SD.open("received.txt", FILE_WRITE);
+  Serial.println("initialization done.");
 
   mySwitch.enableReceive(D2);
   mySwitch.enableTransmit(D1);
@@ -46,6 +57,8 @@ void loop() {
     );
 
     Serial.print(output);
+    myFile.print(output);
+    myFile.flush();
 
     mySwitch.resetAvailable();
   }
