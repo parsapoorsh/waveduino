@@ -1,11 +1,14 @@
 #include <RCSwitch.h>
 #include <SPI.h>
 #include <SD.h>
+#include <AsyncTimer.h>
 
+AsyncTimer t;
 File myFile;
 RCSwitch mySwitch = RCSwitch();
 volatile unsigned long priv_decimal = 0;
 String incomingString;
+bool led_state = false;
 
 void setup() {
   // put your setup code here, to run once:
@@ -25,13 +28,21 @@ void setup() {
   mySwitch.enableTransmit(D1);
 
   pinMode(LED_BUILTIN, OUTPUT);
-  digitalWrite(LED_BUILTIN, LOW);
+  t.setInterval(
+    [](){
+      digitalWrite(LED_BUILTIN, led_state);
+      led_state = !led_state;
+    }, 
+    1000
+  );
 
   Serial.println("ready");
 }
 
 void loop() {
   // put your main code here, to run repeatedly:
+  t.handle();
+
   if (mySwitch.available()) {
     unsigned int protocol = mySwitch.getReceivedProtocol();
     unsigned long decimal = mySwitch.getReceivedValue();
