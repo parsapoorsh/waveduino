@@ -16,14 +16,14 @@ void setup() {
   // Serial.println();
   Serial.println("booting");
 
-  Serial.print("Initializing SD card...");
+  Serial.print("SDcard: Initializing...");
   if (!SD.begin(D8)) {
-    Serial.println("initialization failed!");
-    return;
+    Serial.println("SDcard: initialization failed!");
+  } else {
+    myFile = SD.open("received.txt", FILE_WRITE);
+    Serial.println("SDcard: initialization done.");
   }
-  myFile = SD.open("received.txt", FILE_WRITE);
-  Serial.println("initialization done.");
-
+  
   mySwitch.enableReceive(D2);
   mySwitch.enableTransmit(D1);
 
@@ -74,9 +74,11 @@ void loop() {
 
     Serial.print(output);
 
-    // write to SD card
-    myFile.print(output);
-    myFile.flush();
+    if (myFile.availableForWrite()){
+      // write to SD card
+      myFile.print(output);
+      myFile.flush();
+    }
   
     mySwitch.resetAvailable();
   }
