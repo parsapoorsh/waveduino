@@ -9,6 +9,7 @@ RCSwitch mySwitch = RCSwitch();
 volatile unsigned long priv_decimal = 0;
 String incomingString;
 bool led_state = false;
+unsigned int led_interval = 1000;
 
 void setup() {
   // put your setup code here, to run once:
@@ -19,6 +20,7 @@ void setup() {
   Serial.print("SDcard: Initializing...");
   if (!SD.begin(D8)) {
     Serial.println("SDcard: initialization failed!");
+    led_interval = 100; // blink 10Hz to indicate a problem with SDcard
   } else {
     myFile = SD.open("received.txt", FILE_WRITE);
     Serial.println("SDcard: initialization done.");
@@ -33,7 +35,7 @@ void setup() {
       digitalWrite(LED_BUILTIN, led_state);
       led_state = !led_state;
     }, 
-    1000
+    led_interval
   );
 
   Serial.println("ready");
