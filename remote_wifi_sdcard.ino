@@ -89,10 +89,9 @@ void loop() {
   if (Serial.available() > 0) {
     Serial.print("sending: ");
     
-    incomingString = Serial.readString();
+    incomingString = Serial.readStringUntil('\n');
     
     // converting String to char array
-    // TODO: use a faster method, this is too slow
     int str_len = incomingString.length() + 1; 
     char char_array[str_len];
     incomingString.toCharArray(char_array, str_len);
