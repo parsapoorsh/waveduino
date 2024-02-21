@@ -53,6 +53,8 @@ void loop() {
     unsigned long decimal = mySwitch.getReceivedValue();
     unsigned int length = mySwitch.getReceivedBitlength();
     unsigned int delay = mySwitch.getReceivedDelay();
+    mySwitch.resetAvailable();
+    
     char* bits = dec2binWzerofill(decimal, length);
     char button = convertToLetter(decimal);
     unsigned long remote = convertToRemote(decimal);
@@ -81,8 +83,6 @@ void loop() {
       myFile.print(output);
       myFile.flush();
     }
-  
-    mySwitch.resetAvailable();
   }
   after_receiver:
 
