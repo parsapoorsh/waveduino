@@ -3,6 +3,14 @@
 #include <SD.h>
 #include <AsyncTimer.h>
 
+#define LED_PIN LED_BUILTIN
+#define SDCARD_CS_PIN D8
+#define TRANSMITER_PIN D1
+#define RECEIVE_PIN D2
+
+#define SERIAL_SPEED 115200
+#define NOISE_LENGTH 4
+
 AsyncTimer t;
 File myFile;
 RCSwitch mySwitch = RCSwitch();
@@ -13,12 +21,12 @@ unsigned int led_interval = 1000;
 
 void setup() {
   // put your setup code here, to run once:
-  Serial.begin(115200);
+  Serial.begin(SERIAL_SPEED);
   // Serial.println();
   Serial.println("booting");
 
   Serial.print("SDcard: Initializing...");
-  if (!SD.begin(D8)) {
+  if (!SD.begin(SDCARD_CS_PIN)) {
     Serial.println("SDcard: initialization failed!");
     led_interval = 100; // blink 10Hz to indicate a problem with SDcard
   } else {
@@ -26,13 +34,13 @@ void setup() {
     Serial.println("SDcard: initialization done.");
   }
   
-  mySwitch.enableReceive(D2);
-  mySwitch.enableTransmit(D1);
+  mySwitch.enableReceive(RECEIVE_PIN);
+  mySwitch.enableTransmit(TRANSMITER_PIN);
 
-  pinMode(LED_BUILTIN, OUTPUT);
+  pinMode(LED_PIN, OUTPUT);
   t.setInterval(
     [](){
-      digitalWrite(LED_BUILTIN, led_state);
+      digitalWrite(LED_PIN, led_state);
       led_state = !led_state;
     }, 
     led_interval
@@ -60,7 +68,7 @@ void loop() {
     unsigned long remote = convertToRemote(decimal);
 
     // dont care about noise
-    if (length <= 4)
+    if (length <= NOISE_LENGTH)
       goto after_receiver;
     
     char output[164]; // adjust the size as needed
