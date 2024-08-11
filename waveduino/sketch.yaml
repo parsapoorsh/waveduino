@@ -1,0 +1,10 @@
+default_profile: esp8266
+profiles:
+  esp8266:
+    fqbn: esp8266:esp8266:d1_mini_clone
+    platforms:
+      - platform: esp8266:esp8266 (3.1.2)
+        platform_index_url: http://arduino.esp8266.com/stable/package_esp8266com_index.json
+    libraries:
+      - AsyncTimer (2.4.0)
+      - rc-switch (2.6.4)
