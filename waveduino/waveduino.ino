@@ -1,7 +1,7 @@
-#include <RCSwitch.h>
 #include <SPI.h>
 #include <SD.h>
 #include <AsyncTimer.h>
+#include <RCSwitch.h>
 
 #define LED_PIN LED_BUILTIN
 #define SDCARD_CS_PIN D8

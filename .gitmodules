@@ -1,0 +1,6 @@
+[submodule "libraries/AsyncTimer"]
+	path = libraries/AsyncTimer
+	url = https://github.com/Aasim-A/AsyncTimer
+[submodule "libraries/rc-switch"]
+	path = libraries/rc-switch
+	url = https://github.com/sui77/rc-switch
