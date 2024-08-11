@@ -10,6 +10,8 @@
 
 #define SERIAL_SPEED 115200
 #define NOISE_LENGTH 4
+#define SDCARD_MAX_RETRY 3
+#define SDCARD_RETRY_DELAY 500
 
 AsyncTimer t;
 File myFile;
@@ -17,19 +19,27 @@ RCSwitch mySwitch = RCSwitch();
 
 volatile unsigned long priv_decimal = 0;
 unsigned int led_interval = 1000;
+unsigned int sdcard_retry = SDCARD_MAX_RETRY;
 
 void setup() {
   // put your setup code here, to run once:
   Serial.begin(SERIAL_SPEED);
   Serial.println("booting");
 
-  Serial.print("SDcard: Initializing...");
+  retry_sdcard_init:
+  Serial.println("SDcard: Initializing...");
   if (SD.begin(SDCARD_CS_PIN)) {
     myFile = SD.open("received.txt", FILE_WRITE);
     Serial.println("SDcard: initialization done.");
   } else {
+    Serial.printf("SDcard: initialization failed! (%d)\n", SDCARD_MAX_RETRY - sdcard_retry + 1);
+    if (sdcard_retry > 1){
+      sdcard_retry -= 1;
+      SD.end();
+      delay(SDCARD_RETRY_DELAY);
+      goto retry_sdcard_init;
+    }
     led_interval = 100; // blink 10Hz to indicate a problem with SDcard
-    Serial.println("SDcard: initialization failed!");
   }
 
   mySwitch.enableReceive(RECEIVE_PIN);
