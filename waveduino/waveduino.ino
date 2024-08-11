@@ -32,7 +32,7 @@ void setup() {
     myFile = SD.open(F("received.txt"), FILE_WRITE);
     Serial.println(F("SDcard: initialization done."));
   } else {
-    Serial.printf("SDcard: initialization failed! (%d)\n", SDCARD_MAX_RETRY - sdcard_retry + 1);
+    Serial.printf_P(PSTR("SDcard: initialization failed! (%d)\n"), SDCARD_MAX_RETRY - sdcard_retry + 1);
     if (sdcard_retry > 1){
       sdcard_retry -= 1;
       SD.end();
@@ -76,9 +76,9 @@ void loop() {
 
     char output[164]; // adjust the size as needed
 
-    sprintf(
+    printf_P(
       output,
-      "%lu -> %s / Protocol: %d / Remote: %lu / %dbit %s / Delay: %d / Button: %c\n", 
+      PSTR("%lu -> %s / Protocol: %d / Remote: %lu / %dbit %s / Delay: %d / Button: %c\n"), 
       millis(), 
       (priv_decimal == decimal) ? "Repeated" : "Received", 
       protocol, remote, length, bits, delay, button
@@ -104,12 +104,12 @@ void loop() {
     char char_array[str_len];
     incoming_string.toCharArray(char_array, str_len);
 
-    Serial.printf("sending: %s ", char_array);
+    Serial.printf_P(PSTR("sending: %s "), char_array);
     mySwitch.send(char_array); // send the signal
 
     if (myFile.availableForWrite()){
       // write to SD card
-      myFile.printf("sent %s signal\n", char_array);
+      myFile.printf_P(PSTR("sent %s signal\n"), char_array);
       myFile.flush();
     }
 
