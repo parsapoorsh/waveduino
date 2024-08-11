@@ -80,7 +80,7 @@ void loop() {
       output,
       PSTR("%lu -> %s / Protocol: %d / Remote: %lu / %dbit %s / Delay: %d / Button: %c\n"), 
       millis(), 
-      (priv_decimal == decimal) ? "Repeated" : "Received", 
+      (priv_decimal == decimal) ? PSTR("Repeated") : PSTR("Received"), 
       protocol, remote, length, bits, delay, button
     );
 
