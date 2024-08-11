@@ -24,13 +24,13 @@ unsigned int sdcard_retry = SDCARD_MAX_RETRY;
 void setup() {
   // put your setup code here, to run once:
   Serial.begin(SERIAL_SPEED);
-  Serial.println("booting");
+  Serial.println(F("booting"));
 
   retry_sdcard_init:
-  Serial.println("SDcard: Initializing...");
+  Serial.println(F("SDcard: Initializing..."));
   if (SD.begin(SDCARD_CS_PIN)) {
-    myFile = SD.open("received.txt", FILE_WRITE);
-    Serial.println("SDcard: initialization done.");
+    myFile = SD.open(F("received.txt"), FILE_WRITE);
+    Serial.println(F("SDcard: initialization done."));
   } else {
     Serial.printf("SDcard: initialization failed! (%d)\n", SDCARD_MAX_RETRY - sdcard_retry + 1);
     if (sdcard_retry > 1){
@@ -48,7 +48,7 @@ void setup() {
   pinMode(LED_PIN, OUTPUT);
   t.setInterval(blinkLED, led_interval);
 
-  Serial.println("ready");
+  Serial.println(F("ready"));
 }
 
 void loop() {
@@ -113,7 +113,7 @@ void loop() {
       myFile.flush();
     }
 
-    Serial.println("done");
+    Serial.println(F("done"));
   }
 }
 
