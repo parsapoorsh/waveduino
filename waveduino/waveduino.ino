@@ -5,7 +5,7 @@
 
 #define LED_PIN LED_BUILTIN
 #define SDCARD_CS_PIN D8
-#define TRANSMITER_PIN D1
+#define TRANSMIT_PIN D1
 #define RECEIVE_PIN D2
 
 #define SERIAL_SPEED 115200
@@ -43,7 +43,7 @@ void setup() {
   }
 
   mySwitch.enableReceive(RECEIVE_PIN);
-  mySwitch.enableTransmit(TRANSMITER_PIN);
+  mySwitch.enableTransmit(TRANSMIT_PIN);
 
   pinMode(LED_PIN, OUTPUT);
   t.setInterval(blinkLED, led_interval);
