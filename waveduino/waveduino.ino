@@ -104,10 +104,16 @@ void loop() {
     char char_array[str_len];
     incoming_string.toCharArray(char_array, str_len);
 
-    Serial.print("sending: ");
-    Serial.print(incoming_string);
+    Serial.printf("sending: %s ", char_array);
     mySwitch.send(char_array); // send the signal
-    Serial.println(" done");
+
+    if (myFile.availableForWrite()){
+      // write to SD card
+      myFile.printf("sent %s signal\n", char_array);
+      myFile.flush();
+    }
+
+    Serial.println("done");
   }
 }
 
