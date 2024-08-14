@@ -26,20 +26,20 @@ void setup() {
   Serial.begin(SERIAL_SPEED);
   Serial.println(F("booting"));
 
-  retry_sdcard_init:
+retry_sdcard_init:
   Serial.println(F("SDcard: Initializing..."));
   if (SD.begin(SDCARD_CS_PIN)) {
     myFile = SD.open(F("received.txt"), FILE_WRITE);
     Serial.println(F("SDcard: initialization done."));
   } else {
     Serial.printf_P(PSTR("SDcard: initialization failed! (%d)\n"), SDCARD_MAX_RETRY - sdcard_retry + 1);
-    if (sdcard_retry > 1){
+    if (sdcard_retry > 1) {
       sdcard_retry -= 1;
       SD.end();
       delay(SDCARD_RETRY_DELAY);
       goto retry_sdcard_init;
     }
-    led_interval = 100; // blink 10Hz to indicate a problem with SDcard
+    led_interval = 100;  // blink 10Hz to indicate a problem with SDcard
   }
 
   mySwitch.enableReceive(RECEIVE_PIN);
@@ -58,7 +58,7 @@ void loop() {
   // 1ms sleep to avoid 100% cpu utilization, good for cpu temp and longer batter life
   delay(1);
 
-  ignore_noise:
+ignore_noise:
   if (mySwitch.available()) {
     unsigned int protocol = mySwitch.getReceivedProtocol();
     unsigned long decimal = mySwitch.getReceivedValue();
@@ -74,20 +74,19 @@ void loop() {
     if (length <= NOISE_LENGTH)
       goto ignore_noise;
 
-    char output[164]; // adjust the size as needed
+    char output[164];  // adjust the size as needed
 
     printf_P(
       output,
-      PSTR("%lu -> %s / Protocol: %d / Remote: %lu / %dbit %s / Delay: %d / Button: %c\n"), 
-      millis(), 
-      (priv_decimal == decimal) ? PSTR("Repeated") : PSTR("Received"), 
-      protocol, remote, length, bits, delay, button
-    );
+      PSTR("%lu -> %s / Protocol: %d / Remote: %lu / %dbit %s / Delay: %d / Button: %c\n"),
+      millis(),
+      (priv_decimal == decimal) ? PSTR("Repeated") : PSTR("Received"),
+      protocol, remote, length, bits, delay, button);
 
     if (priv_decimal != decimal)
       priv_decimal = decimal;
 
-    if (myFile.availableForWrite()){
+    if (myFile.availableForWrite()) {
       // write to SD card
       myFile.print(output);
       myFile.flush();
@@ -105,9 +104,9 @@ void loop() {
     incoming_string.toCharArray(char_array, str_len);
 
     Serial.printf_P(PSTR("sending: %s "), char_array);
-    mySwitch.send(char_array); // send the signal
+    mySwitch.send(char_array);  // send the signal
 
-    if (myFile.availableForWrite()){
+    if (myFile.availableForWrite()) {
       // write to SD card
       myFile.printf_P(PSTR("sent %s signal\n"), char_array);
       myFile.flush();
@@ -117,7 +116,7 @@ void loop() {
   }
 }
 
-void blinkLED(){
+void blinkLED() {
   bool led_state = digitalRead(LED_PIN);
   digitalWrite(LED_PIN, !led_state);
 }

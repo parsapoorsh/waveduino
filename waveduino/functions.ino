@@ -35,4 +35,4 @@ static char* dec2binWzerofill(unsigned long Dec, unsigned int bitLength) {
   bin[bitLength] = '\0';
 
   return bin;
-} 
+}
